@@ -6,12 +6,12 @@ L0.5 contains bounded atomic skill cards for movement, posture, safety, and sens
 
 | path | content |
 |---|---|
-| `en/` | standalone English cards |
-| `zh/` | standalone Chinese cards |
-| `bilingual/` | standalone bilingual cards |
-| `L0.5_cards_en.md` | English collection |
-| `L0.5_cards_zh.md` | Chinese collection |
-| `L0.5_cards_bilingual.md` | bilingual collection |
+| `cards/en/` | standalone English cards |
+| `cards/zh/` | standalone Chinese cards |
+| `cards/bilingual/` | standalone bilingual cards |
+| `collections/en.md` | English collection |
+| `collections/zh.md` | Chinese collection |
+| `collections/bilingual.md` | bilingual collection |
 
 ## Cards
 
@@ -33,4 +33,3 @@ L0.5 contains bounded atomic skill cards for movement, posture, safety, and sens
 ## Boundary
 
 L0.5 cards define atomic, bounded skill calls. They do not add obstacle avoidance, target selection, arrival verification, recovery, scheduling, or task planning.
-

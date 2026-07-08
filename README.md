@@ -73,9 +73,9 @@ This returns `rejected(E_PROFILE_MIXED)`.
 
 | file | purpose |
 |---|---|
-| `L0/L0_cards_bilingual.md` | bilingual L0 package |
+| `L0/collections/bilingual.md` | bilingual L0 package |
 | `L0.5.md` | bilingual L0.5 skill-card file |
+| `L0.5/collections/bilingual.md` | bilingual L0.5 package |
 | `docs/all_cards_bilingual.md` | all 13 bilingual cards |
 | `docs/global_semantics_en.md` | English global execution semantics |
 | `docs/global_semantics_zh.md` | Chinese global execution semantics |
-

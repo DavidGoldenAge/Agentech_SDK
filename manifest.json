@@ -10,9 +10,24 @@
     "L0": "L0/",
     "L0.5": "L0.5/"
   },
+  "structure": {
+    "L0": {
+      "manifest": "L0/manifest.json",
+      "cards": "L0/cards/",
+      "collections": "L0/collections/"
+    },
+    "L0.5": {
+      "manifest": "L0.5/manifest.json",
+      "cards": "L0.5/cards/",
+      "collections": "L0.5/collections/"
+    },
+    "docs": "docs/"
+  },
   "entrypoints": {
     "L0 package": "L0/",
+    "L0 bilingual collection": "L0/collections/bilingual.md",
     "L0.5 bilingual file": "L0.5.md",
+    "L0.5 bilingual collection": "L0.5/collections/bilingual.md",
     "all bilingual cards": "docs/all_cards_bilingual.md"
   }
 }

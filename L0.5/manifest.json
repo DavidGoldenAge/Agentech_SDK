@@ -1,66 +1,139 @@
 {
   "package": "L0.5",
+  "layer": "L0.5",
   "description": "Atomic bounded robot action/posture/safety/sensing cards.",
+  "structure": {
+    "cards": {
+      "en": "cards/en/",
+      "zh": "cards/zh/",
+      "bilingual": "cards/bilingual/"
+    },
+    "collections": {
+      "en": "collections/en.md",
+      "zh": "collections/zh.md",
+      "bilingual": "collections/bilingual.md"
+    }
+  },
   "cards": [
     {
       "id": "01_forward",
       "function": "Agentech.forward",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/01_forward.md",
+        "zh": "cards/zh/01_forward.md",
+        "bilingual": "cards/bilingual/01_forward.md"
+      }
     },
     {
       "id": "02_backward",
       "function": "Agentech.backward",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/02_backward.md",
+        "zh": "cards/zh/02_backward.md",
+        "bilingual": "cards/bilingual/02_backward.md"
+      }
     },
     {
       "id": "03_lateral",
       "function": "Agentech.lateral",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/03_lateral.md",
+        "zh": "cards/zh/03_lateral.md",
+        "bilingual": "cards/bilingual/03_lateral.md"
+      }
     },
     {
       "id": "04_turn",
       "function": "Agentech.turn",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/04_turn.md",
+        "zh": "cards/zh/04_turn.md",
+        "bilingual": "cards/bilingual/04_turn.md"
+      }
     },
     {
       "id": "05_twist",
       "function": "Agentech.twist",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/05_twist.md",
+        "zh": "cards/zh/05_twist.md",
+        "bilingual": "cards/bilingual/05_twist.md"
+      }
     },
     {
       "id": "06_backflip",
       "function": "Agentech.backflip",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/06_backflip.md",
+        "zh": "cards/zh/06_backflip.md",
+        "bilingual": "cards/bilingual/06_backflip.md"
+      }
     },
     {
       "id": "07_jump",
       "function": "Agentech.jump",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/07_jump.md",
+        "zh": "cards/zh/07_jump.md",
+        "bilingual": "cards/bilingual/07_jump.md"
+      }
     },
     {
       "id": "08_stand",
       "function": "Agentech.stand",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/08_stand.md",
+        "zh": "cards/zh/08_stand.md",
+        "bilingual": "cards/bilingual/08_stand.md"
+      }
     },
     {
       "id": "09_sit",
       "function": "Agentech.sit",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/09_sit.md",
+        "zh": "cards/zh/09_sit.md",
+        "bilingual": "cards/bilingual/09_sit.md"
+      }
     },
     {
       "id": "10_stop",
       "function": "Agentech.stop",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/10_stop.md",
+        "zh": "cards/zh/10_stop.md",
+        "bilingual": "cards/bilingual/10_stop.md"
+      }
     },
     {
       "id": "11_emergency_stop",
       "function": "Agentech.emergency_stop",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/11_emergency_stop.md",
+        "zh": "cards/zh/11_emergency_stop.md",
+        "bilingual": "cards/bilingual/11_emergency_stop.md"
+      }
     },
     {
       "id": "12_look",
       "function": "Agentech.look",
-      "layer": "L0.5"
+      "layer": "L0.5",
+      "paths": {
+        "en": "cards/en/12_look.md",
+        "zh": "cards/zh/12_look.md",
+        "bilingual": "cards/bilingual/12_look.md"
+      }
     }
   ]
 }

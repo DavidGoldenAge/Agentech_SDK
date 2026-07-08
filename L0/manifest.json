@@ -1,11 +1,25 @@
 {
   "package": "L0",
+  "layer": "L0",
   "description": "Atomic telemetry/data-read cards.",
+  "structure": {
+    "cards": "cards/",
+    "collections": {
+      "en": "collections/en.md",
+      "zh": "collections/zh.md",
+      "bilingual": "collections/bilingual.md"
+    }
+  },
   "cards": [
     {
       "id": "13_get_battery_status",
       "function": "Agentech.get_battery_status",
-      "layer": "L0"
+      "layer": "L0",
+      "paths": {
+        "en": "cards/get_battery_status.en.md",
+        "zh": "cards/get_battery_status.zh.md",
+        "bilingual": "cards/get_battery_status.bilingual.md"
+      }
     }
   ]
 }
