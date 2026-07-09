@@ -1,95 +1,121 @@
 # Agentech Inc SDK
 
-Agentech SDK skill-card specifications for robot-dog control, telemetry, posture, safety, and sensing.
+Agentech SDK card specifications for Aegis robot-dog telemetry and bounded atomic skills.
 
 Current version: `0.2.0`
 
 This repository contains 13 SDK cards:
 
-- 1 L0.0 telemetry card
-- 12 L0.5 atomic skill cards
-- English and Chinese Markdown versions
-
-## Level Naming
-
-All level package folders use `L<integer>.<single decimal>` format.
-
-Current planned level sequence:
-
-- `L0.0`
-- `L0.5`
-- `L1.0`
-- `L1.5`
-- `L2.0`
-- `L2.5`
-
-Current active packages are `L0.0/` and `L0.5/`.
+| Layer | Count | Responsibility | Entry |
+| --- | ---: | --- | --- |
+| `L0.0` | 1 | Direct telemetry snapshot reads | `L0.0/` |
+| `L0.5` | 12 | Bounded atomic movement, posture, safety, and sensing/posture skills | `L0.5/` |
 
 ## Repository Structure
 
-| path | content |
-|---|---|
-| `L0.0/` | L0.0 telemetry/data-read package |
-| `L0.5/` | L0.5 atomic skill-card package |
-| `manifest.json` | repository index |
-| `version history.md` | version history |
+| Path | Content |
+| --- | --- |
+| `L0.0/README.md` | L0.0 package index |
+| `L0.0/cards/` | English and Chinese L0.0 telemetry cards |
+| `L0.5/README.md` | L0.5 package index |
+| `L0.5/cards/en/` | English L0.5 cards |
+| `L0.5/cards/zh/` | Chinese L0.5 cards |
+| `manifest.json` | Repository-level card index |
+| `version history.md` | Version history |
 
-## L0.0 Package
+## Layer Model
 
-`L0.0/` contains direct telemetry/data-read cards.
+Agentech SDK uses level folders to keep API responsibility explicit.
 
-Current card:
+| Layer | Definition | Typical Return |
+| --- | --- | --- |
+| `L0.0` | Reads one direct device telemetry snapshot. | Typed telemetry snapshot |
+| `L0.5` | Executes one bounded SDK skill or safety/posture command. | `SkillResult` |
+| `L1.0` | Builds a narrow primitive from lower-level actions. | Typed primitive result |
+| `L1.5` | Combines primitives into reusable measurement, verification, or observation. | Evidence-backed skill result |
+| `L2.0` | Answers one domain-level scene question. | Domain decision |
+| `L2.5` | Prepares a workflow package, route package, or checklist. | Execution-ready package |
 
-- `Agentech.get_battery_status`
+## Card Anatomy
 
-L0.0 cards read state only. They do not command motion, stream over time, make safety decisions, or schedule tasks.
+Each card is written for both developers and code-generation agents. The visible sections explain the API, while stable comments let scripts extract a section without guessing.
 
-## L0.5 Package
+Required modules:
 
-`L0.5/` contains bounded atomic skill cards.
+| Module | Purpose |
+| --- | --- |
+| `Definition` | Layer, category, and function purpose |
+| `Syntax` | Callable shapes with parameter names and types |
+| `Constraints` | Legal combinations, selector rules, and rejection behavior |
+| `Defaults` | Exact behavior when optional parameters are omitted |
+| `Parameters` | Ranges, units, mappings, and engineering notes |
+| `Behavior` | Runtime execution semantics |
+| `Return` | Return type and stable fields |
+| `Example` | Concrete calls with values |
 
-Current cards:
+Module markers:
 
-- `Agentech.forward`
-- `Agentech.backward`
-- `Agentech.lateral`
-- `Agentech.turn`
-- `Agentech.twist`
-- `Agentech.backflip`
-- `Agentech.jump`
-- `Agentech.stand`
-- `Agentech.sit`
-- `Agentech.stop`
-- `Agentech.emergency_stop`
-- `Agentech.look`
+```md
+<!-- START: Parameters -->
+## Parameters
 
-L0.5 cards are direct, bounded SDK skills. They do not perform obstacle avoidance, target selection, arrival verification, recovery, scheduling, or task planning.
-
-## Parameter Profile Constraint
-
-Each function may support multiple parameter profiles, but each call may select at most one profile.
-
-Example:
-
-```matlab
-Agentech.forward(SpeedPercent=30, DurationS=1.0)
+...
+<!-- END: Parameters -->
 ```
 
-`SpeedPercent` selects the `percent-time` profile. `DurationS` is an auxiliary parameter.
+Extraction example:
 
-Invalid mixed-profile call:
+```python
+from pathlib import Path
+import re
 
-```matlab
-Agentech.forward(SpeedPercent=30, SpeedLevel=3)
+MODULE_RE = re.compile(
+    r"<!-- START: ([A-Za-z0-9_-]+) -->(.*?)<!-- END: \1 -->",
+    re.DOTALL,
+)
+
+def extract_modules(path: str) -> dict[str, str]:
+    text = Path(path).read_text(encoding="utf-8")
+    return {name: body.strip() for name, body in MODULE_RE.findall(text)}
+
+modules = extract_modules("L0.5/cards/en/01_forward.md")
+print(modules["Syntax"])
 ```
 
-This returns `rejected(E_PROFILE_MIXED)`.
+## API Naming
+
+Python SDK parameters use `snake_case`.
+
+| Parameter | Meaning |
+| --- | --- |
+| `speed_mps` | Speed in meters per second |
+| `duration_s` | Duration in seconds |
+| `speed_percent` | Product-calibrated speed percentage |
+| `step_rate_hz` | Step rate in hertz |
 
 ## Main Entry Points
 
-| file | purpose |
-|---|---|
-| `L0.0/cards/get_battery_status.en.md` | English L0.0 card |
-| `L0.0/cards/get_battery_status.zh.md` | Chinese L0.0 card |
-| `L0.5/cards/en/` | English L0.5 cards |
-| `L0.5/cards/zh/` | Chinese L0.5 cards |
+| Package | English | Chinese |
+| --- | --- | --- |
+| `L0.0` | `L0.0/cards/get_battery_status.en.md` | `L0.0/cards/get_battery_status.zh.md` |
+| `L0.5` | `L0.5/cards/en/` | `L0.5/cards/zh/` |
+
+## Parameter Profile Rule
+
+A parameter profile is one supported way to express the same SDK action. A selector parameter chooses the profile, and auxiliary parameters configure that selected profile.
+
+Example:
+
+```python
+Agentech.forward(speed_percent=40, duration_s=1.0)
+```
+
+`speed_percent` selects the `percent-time` profile. `duration_s` configures that profile.
+
+Mixed profile example:
+
+```python
+Agentech.forward(speed_percent=40, speed_level=3)
+```
+
+This returns `rejected(E_PROFILE_MIXED)`.
