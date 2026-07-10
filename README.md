@@ -64,7 +64,7 @@ English:
 
 | # | API | Category | Card |
 | ---: | --- | --- | --- |
-| L0.0 | `Agentech.get_battery_status(parameters)` | Telemetry | `L0.0/cards/get_battery_status.en.md` |
+| 00 | `Agentech.get_battery_status(parameters)` | Telemetry | `L0.0/cards/get_battery_status.en.md` |
 | 01 | `Agentech.forward(parameters)` | Movement | `L0.5/cards/en/01_forward.md` |
 | 02 | `Agentech.backward(parameters)` | Movement | `L0.5/cards/en/02_backward.md` |
 | 03 | `Agentech.lateral(parameters)` | Movement | `L0.5/cards/en/03_lateral.md` |
@@ -82,7 +82,7 @@ English:
 
 | # | API | 类别 | 卡片 |
 | ---: | --- | --- | --- |
-| L0.0 | `Agentech.get_battery_status(parameters)` | 遥测 | `L0.0/cards/get_battery_status.zh.md` |
+| 00 | `Agentech.get_battery_status(parameters)` | 遥测 | `L0.0/cards/get_battery_status.zh.md` |
 | 01 | `Agentech.forward(parameters)` | 移动 | `L0.5/cards/zh/01_forward.md` |
 | 02 | `Agentech.backward(parameters)` | 移动 | `L0.5/cards/zh/02_backward.md` |
 | 03 | `Agentech.lateral(parameters)` | 移动 | `L0.5/cards/zh/03_lateral.md` |
