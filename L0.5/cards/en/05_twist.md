@@ -1,5 +1,3 @@
-下面这版将 `30°` 作为 Agentech 真机测得的身体扭转安全范围；角速度范围采用 Agibot 的 `attitudeControl()` 数据。没有可靠映射依据的 `angle_percent` 和 `twist_level` 标记为 `TBD`。
-
 # `Agentech.twist(parameters)`
 
 <!-- START: Definition -->
