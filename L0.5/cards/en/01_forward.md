@@ -1,12 +1,9 @@
 # `Agentech.forward(parameters)`
 
 <!-- START: Definition -->
-## Definition
-
-**L0.5 · Movement** — Move the Aegis robot dog straight backward at a specified speed, for a specified duration or approximate distance, then stop.
-
-Use this function for simple backward movement. Speed is provided as a positive magnitude and may be expressed directly, as a percentage, as a level, or as a named pace such as `"slow"`, `"normal"`, or `"fast"`.
-
+Definition
+L0.5 · Movement — Move the Aegis robot dog straight forward at a specified speed, for a specified duration or approximate distance, then stop.
+Use this function for simple forward movement. Speed can be provided directly or expressed as a percentage, level, or named pace such as "slow", "normal", or "fast".
 Distance-based movement is estimated from speed and time. It does not guarantee that the robot travels the exact requested distance.
 <!-- END: Definition -->
 
