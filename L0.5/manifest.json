@@ -3,11 +3,11 @@
   "layer": "L0.5",
   "description": "Atomic bounded ZSL-1 movement, discrete-action, posture, and safety cards.",
   "structure": {
-    "status": "unclassified",
+    "status": "partially_classified",
     "path_base": "repository_root",
-    "cards": {
-      "en": "Unclassify/En/",
-      "ch": "Unclassify/Ch/"
+    "paths": {
+      "classified": "L0.5/<robot>/<language>/<category>/",
+      "unclassified": "Unclassify/<language>/"
     }
   },
   "cards": [
@@ -16,8 +16,8 @@
       "function": "Agentech.forward",
       "layer": "L0.5",
       "paths": {
-        "en": "Unclassify/En/01_forward.md",
-        "ch": "Unclassify/Ch/01_forward.md"
+        "en": "L0.5/ff.aegis/En/movement/01_forward.md",
+        "ch": "L0.5/ff.aegis/Ch/movement/01_forward.md"
       }
     },
     {
@@ -25,8 +25,8 @@
       "function": "Agentech.backward",
       "layer": "L0.5",
       "paths": {
-        "en": "Unclassify/En/02_backward.md",
-        "ch": "Unclassify/Ch/02_backward.md"
+        "en": "L0.5/ff.aegis/En/movement/02_backward.md",
+        "ch": "L0.5/ff.aegis/Ch/movement/02_backward.md"
       }
     },
     {

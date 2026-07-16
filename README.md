@@ -18,8 +18,8 @@ Agentech_SDK/
 └── manifest.json
 ```
 
-`Unclassify/` is the top-level working inbox. All existing cards remain there
-until card-by-card classification begins.
+`Unclassify/` is the top-level working inbox. Cards remain there until their
+layer, robot, language, and website category are confirmed.
 
 Formal classified cards will use:
 
@@ -86,14 +86,16 @@ a profile.
 
 ## Current Status
 
-- All 26 existing bilingual card files are in `Unclassify/`.
+- The Aegis `forward` and `backward` bilingual cards are classified under
+  `L0.5/ff.aegis/<language>/movement/`.
+- The remaining 22 card files are in `Unclassify/`.
 - The current SDK layer structures are `L0.0`, `L0.5`, and `L1.0`.
 - `ff.master` remains empty because testing has not started.
 - Only this root README is maintained.
 
 ## 记忆总结
 
-当前仓库先完成结构，不立即分类。所有旧卡统一放在最外层
-`Unclassify/En` 和 `Unclassify/Ch`；以后逐张审核后，再移入对应的
-SDK 层级、机器人和官网类别。`profiles/` 位于最外层，保存机器人底层
-接口和参数依据，但其中数据仍需要继续核验和补充。
+当前已确认 Aegis 的 `forward` 和 `backward` 属于 `L0.5/movement`，
+中英文共四张卡已移入正式层级；其余 22 张卡继续放在最外层
+`Unclassify/En` 和 `Unclassify/Ch` 等待逐张确认。`profiles/` 位于
+最外层，保存机器人底层接口和参数依据，但其中数据仍需要继续核验和补充。
