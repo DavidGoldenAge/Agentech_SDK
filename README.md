@@ -15,7 +15,6 @@ Agentech_SDK/
 ├── L0.5/
 ├── L1.0/
 ├── profiles/
-├── scripts/
 └── manifest.json
 ```
 
@@ -80,8 +79,8 @@ schema must match across both languages.
 - return codes and control modes;
 - source provenance and unresolved `TBD` fields.
 
-These profiles are the intended bottom-level data source for contract
-validation, but their values still require ongoing source and hardware review.
+These profiles are the intended bottom-level data source for SDK definitions,
+but their values still require ongoing source and hardware review.
 An existing value must not be treated as accurate merely because it appears in
 a profile.
 
@@ -91,17 +90,6 @@ a profile.
 - The current SDK layer structures are `L0.0`, `L0.5`, and `L1.0`.
 - `ff.master` remains empty because testing has not started.
 - Only this root README is maintained.
-
-## Validation
-
-Run:
-
-```bash
-ruby scripts/validate_sdk_contract.rb
-```
-
-The validator checks card structure, bilingual pairing, manifest paths,
-parameter mappings, and preserved `TBD` fields.
 
 ## 记忆总结
 
