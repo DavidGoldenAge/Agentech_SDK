@@ -1,28 +1,108 @@
-schema_version: 1
+schema_version: 2
 profile_id: aegis-zsl1
-sdk_version: 0.3.0
+profile_revision: 2026-07-16
 
-provenance:
+scope:
+  robot: ff.aegis
   vendor: Agibot
-  interface: ZSL-1 high-level SDK
-  source_package: agibot_D1_Edu-Ultra
-  source_files:
-    - docs/api_zsl-1.md
-    - docs/faq.md
-    - include/zsl-1/highlevel.h
-    - demo/zsl-1/cpp/highlevel_demo.cpp
-    - demo/zsl-1/python/examples/highlevel_demo_Interactive.py
-  value_policy: >-
-    Hardware-command limits and method semantics come from the upstream SDK.
-    Public aliases are deterministic Agentech mappings, not measured robot data.
-  hardware_model_mapping: TBD
+  hardware_family: D1 Edu / D1 Ultra
+  backend_interface: ZSL-1 high-level SDK
+  minimum_documented_firmware: 0.2.6
+  note: >-
+    This profile separates Agentech's public Skill contract from Agibot's
+    hardware and backend API. A product-level capability is not automatically
+    treated as a callable ZSL-1 method.
 
-coordinate_frame:
-  frame: body
-  x: forward
-  y: left
-  z: up
-  angular_sign: right_hand_rule
+sources:
+  agentech_skill_catalog:
+    url: https://www.agent-tech.ai/agentech-products/eaic-hub/view-sdk
+    reviewed_at: 2026-07-16
+    role: public_skill_names_parameters_and_defaults
+  agibot_development_guide:
+    url: https://www.agibot.com.cn/filepage/324.html
+    reviewed_at: 2026-07-16
+    applies_to: D1 Edu and D1 Ultra with firmware 0.2.6 or newer
+    role: current_product_and_sdk_documentation
+  agibot_source:
+    url: https://github.com/AgibotTech/agibot_D1_Edu-Ultra
+    commit: db8accd739739e379906f2b3d8abf22bac835385
+    files:
+      - include/zsl-1/highlevel.h
+      - docs/api_zsl-1.md
+      - docs/faq.md
+      - demo/zsl-1/cpp/highlevel_demo.cpp
+    role: callable_method_names_types_limits_and_examples
+  product_manual_pdf:
+    url: https://cdn.robotshop.com/media/A/Agb/RB-Agb-04/pdf/D1%20Edu%20Product%20Manual%20_CN%26EN_20260326.pdf
+    edition: 2026-03-26
+    reviewed_at: 2026-07-16
+    role: product_level_cross_check
+
+source_priority:
+  callable_method_name:
+    - agibot_source_header
+    - agibot_source_demo
+    - agibot_api_markdown
+  backend_parameter_limit:
+    - agibot_api_markdown
+    - agibot_current_development_guide
+  public_skill_contract:
+    - agentech_skill_catalog
+  hardware_specification:
+    - agibot_current_development_guide
+    - product_manual_pdf
+  conflict_rule: >-
+    Record both values and block automatic mapping when sources describe
+    different layers or cannot be reconciled without physical verification.
+
+hardware:
+  degrees_of_freedom: 12
+  mass_with_battery_kg: 15.5
+  operating_temperature_c: {min: 0, max: 40}
+  rated_payload_kg: 5
+  nominal_battery: {capacity_ah: 4.6, voltage_v: 43.2}
+  charge_time_h: 1
+  endurance_h: {min: 1, max: 2}
+  range_km: 6
+  current_guide_max_speed_mps: 3.7
+  continuous_stair_height_cm: 16
+  slope_deg: {standard: 30, extreme: 40}
+  vertical_jump_height_cm: 35
+  maximum_joint_torque_nm: 48
+  joint_motion_space_deg:
+    body: {min: -28, max: 28}
+    thigh: {min: -170, max: 66}
+    calf: {min: -35, max: 156}
+  evidence_note: >-
+    Hardware maximum speed is a product specification, not a permitted move()
+    command. The ZSL-1 move() command remains limited to 3.0 m/s.
+  source_discrepancies:
+    maximum_speed:
+      current_development_guide_mps: 3.7
+      product_manual_pdf_mps: 3.5
+      resolution: use_current_guide_for_hardware_only
+    calf_joint_minimum:
+      current_development_guide_deg: -35
+      product_manual_pdf_deg: 35
+      resolution: retain_current_guide_value_and_require_physical_model_verification
+
+coordinate_frames:
+  backend_body:
+    x_positive: forward
+    y_positive: left
+    z_positive: up
+    angular_sign: right_hand_rule
+  public_diagonal:
+    x_positive: right
+    y_positive: forward
+    conversion:
+      backend_vx_mps: public_y_velocity_mps
+      backend_vy_mps: -public_x_velocity_mps
+  public_turn:
+    positive: right
+    negative: left
+    conversion:
+      backend_yaw_rate_rad_s: -public_turn_rate_rad_s
 
 backend:
   lifecycle:
@@ -30,29 +110,22 @@ backend:
       method: initRobot
       arguments: [local_ip, local_port, dog_ip]
       default_dog_ip: 192.168.234.1
+      documented_default_port: 43988
     connection_check:
-      method: checkConnect
+      callable_method: checkConnect
+      documentation_alias: checkConnection
       arguments: []
       return_type: bool
+      note: Header and demos are authoritative for the callable spelling.
   move:
     method: move
     arguments: [vx_mps, vy_mps, yaw_rate_rad_s]
-    high_level_frequency_hz: 50
-    frequency_source: docs/faq.md
+    recommended_command_frequency_hz: 50
     entry_state: standing
     axes:
-      vx_mps:
-        zero_allowed: true
-        nonzero_abs_min: 0.05
-        abs_max: 3.0
-      vy_mps:
-        zero_allowed: true
-        nonzero_abs_min: 0.1
-        abs_max: 1.0
-      yaw_rate_rad_s:
-        zero_allowed: true
-        nonzero_abs_min: 0.02
-        abs_max: 3.0
+      vx_mps: {zero_allowed: true, nonzero_abs_min: 0.05, abs_max: 3.0}
+      vy_mps: {zero_allowed: true, nonzero_abs_min: 0.1, abs_max: 1.0}
+      yaw_rate_rad_s: {zero_allowed: true, nonzero_abs_min: 0.02, abs_max: 3.0}
   attitude_control:
     method: attitudeControl
     arguments: [roll_rate_rad_s, pitch_rate_rad_s, yaw_rate_rad_s, height_rate_mps]
@@ -62,92 +135,62 @@ backend:
       pitch_rate_rad_s: {min: -0.5, max: 0.5}
       yaw_rate_rad_s: {min: -0.5, max: 0.5}
       height_rate_mps: {min: -0.5, max: 0.5}
+    limitation: velocity_control_only_not_absolute_pose_control
   actions:
-    stand: {method: standUp, arguments: [], return_type: uint32, transition_while_moving: false}
-    lie_down: {method: lieDown, arguments: [], return_type: uint32, transition_while_moving: false}
+    stand: {method: standUp, arguments: [], return_type: uint32}
+    lie_down: {method: lieDown, arguments: [], return_type: uint32}
     passive: {method: passive, arguments: [], return_type: uint32}
-    jump: {method: jump, arguments: [], return_type: uint32, entry_state: standing, transition_while_moving: false}
-    front_jump: {method: frontJump, arguments: [], return_type: uint32, entry_state: standing, transition_while_moving: false}
-    backflip: {method: backflip, arguments: [], return_type: uint32, entry_state: standing, transition_while_moving: false, frequent_use_wear_warning: true}
-    shake_hand: {method: shakeHand, arguments: [], return_type: uint32, entry_state: standing, transition_while_moving: false, frequent_use_wear_warning: true}
+    jump: {method: jump, arguments: [], return_type: uint32}
+    front_jump: {method: frontJump, arguments: [], return_type: uint32}
+    backflip:
+      method: backflip
+      arguments: []
+      return_type: uint32
+      frequent_use_wear_warning: true
+    shake_hand:
+      method: shakeHand
+      arguments: []
+      return_type: uint32
+      frequent_use_wear_warning: true
     two_leg_stand:
       method: twoLegStand
       arguments: [vx_mps, yaw_rate_rad_s]
       return_type: uint32
       axes:
-        vx_mps:
-          zero_allowed: true
-          nonzero_abs_min: 0.2
-          abs_max: 0.5
-        yaw_rate_rad_s:
-          zero_allowed: true
-          nonzero_abs_min: 0.2
-          abs_max: 1.0
+        vx_mps: {zero_allowed: true, nonzero_abs_min: 0.2, abs_max: 0.5}
+        yaw_rate_rad_s: {zero_allowed: true, nonzero_abs_min: 0.2, abs_max: 1.0}
       exit_method: cancelTwoLegStand
-      other_methods_accepted_while_active: false
-    cancel_two_leg_stand: {method: cancelTwoLegStand, arguments: [], return_type: void}
+  unavailable_zsl1_high_level_methods:
+    - crawl
+    - squat
+    - absolute_yaw
+    - absolute_pitch
+    - absolute_roll
+    - exact_distance_motion
+    - exact_step_count
   telemetry:
-    quaternion:
-      method: getQuaternion
-      type: vector_float
-      order: [w, x, y, z]
-      unit: unitless
-    rpy_rad:
-      method: getRPY
-      type: vector_float
-      order: [roll, pitch, yaw]
-      unit: rad
-    body_acceleration_mps2:
-      method: getBodyAcc
-      type: vector_float
-      order: [x, y, z]
-      unit: m_per_s2
-      frame: body
-    body_gyro_rad_s:
-      method: getBodyGyro
-      type: vector_float
-      order: [x, y, z]
-      unit: rad_per_s
-      frame: body
-    origin_position_m:
-      method: getPosition
-      type: vector_float
-      order: [x, y, z]
-      unit: m
-      frame: power_on_origin
-    world_velocity_mps:
-      method: getWorldVelocity
-      type: vector_float
-      order: [x, y, z]
-      unit: m_per_s
-      frame: power_on_origin
-    body_velocity_mps:
-      method: getBodyVelocity
-      type: vector_float
-      order: [x, y, z]
-      unit: m_per_s
-      frame: body
-    battery_percent:
-      method: getBatteryPower
-      type: uint32
-      min: 0
-      max: 100
-    control_mode:
-      method: getCurrentCtrlmode
-      type: uint32
+    quaternion: {method: getQuaternion, order: [w, x, y, z], unit: unitless}
+    rpy: {method: getRPY, order: [roll, pitch, yaw], unit: rad}
+    body_acceleration: {method: getBodyAcc, order: [x, y, z], unit: m_per_s2}
+    body_gyro: {method: getBodyGyro, order: [x, y, z], unit: rad_per_s}
+    origin_position: {method: getPosition, order: [x, y, z], unit: m}
+    world_velocity: {method: getWorldVelocity, order: [x, y, z], unit: m_per_s}
+    body_velocity: {method: getBodyVelocity, order: [x, y, z], unit: m_per_s}
+    battery_percent: {method: getBatteryPower, type: uint32, min: 0, max: 100}
+    control_mode: {method: getCurrentCtrlmode, type: uint32}
     joint_order: [front_right, front_left, rear_right, rear_left]
-    joint_angle_rad:
-      abad: {method: getLegAbadJoint, type: vector_float, unit: rad}
-      hip: {method: getLegHipJoint, type: vector_float, unit: rad}
-      knee: {method: getLegKneeJoint, type: vector_float, unit: rad}
-    joint_velocity_rad_s:
-      abad: {method: getLegAbadJointVel, type: vector_float, unit: rad_per_s}
-      hip: {method: getLegHipJointVel, type: vector_float, unit: rad_per_s}
-      knee: {method: getLegKneeJointVel, type: vector_float, unit: rad_per_s}
+    joint_angle:
+      abad: {method: getLegAbadJoint, unit: rad}
+      hip: {method: getLegHipJoint, unit: rad}
+      knee: {method: getLegKneeJoint, unit: rad}
+    joint_velocity:
+      abad: {method: getLegAbadJointVel, unit: rad_per_s}
+      hip: {method: getLegHipJointVel, unit: rad_per_s}
+      knee: {method: getLegKneeJointVel, unit: rad_per_s}
     joint_torque:
-      abad: {method: getLegAbadJointTorque, type: vector_float, unit: N_m, unit_source_wording: usually}
-      hip: {method: getLegHipJointTorque, type: vector_float, unit: N_m, unit_source_wording: usually}
-      knee: {method: getLegKneeJointTorque, type: vector_float, unit: N_m, unit_source_wording: usually}
+      abad: {method: getLegAbadJointTorque, unit: N_m}
+      hip: {method: getLegHipJointTorque, unit: N_m}
+      knee: {method: getLegKneeJointTorque, unit: N_m}
   return_codes:
     0x0000: success
     0x3007: state_transition_failed
@@ -156,161 +199,232 @@ backend:
     0x3011: motor_fault
     0x3012: motor_data_loss
     0x3013: speed_command_too_large
-  control_modes:
-    0: passive_or_damping
-    1: standing_or_greeting
-    10: lie_or_free_after_delay
-    18: moving
-    21: action
-    51: lie_down
 
 public_contract:
-  longitudinal:
-    backend_axis: vx_mps
-    public_abs_min_mps: 0.05
-    public_abs_max_mps: 1.0
-    default_speed_mps: 0.4
-    default_duration_s: 1.0
-    max_duration_s: 10.0
-    max_forward_distance_m: 5.0
-    max_backward_distance_m: 3.0
-    speed_percent:
-      min: 5
-      max: 100
-      formula: speed_percent / 100.0 * public_abs_max_mps
-    speed_levels_mps:
-      1: 0.2
-      2: 0.4
-      3: 0.6
-      4: 0.8
-      5: 1.0
-    pace_mps:
-      slow: 0.2
-      normal: 0.4
-      fast: 0.8
-    signs:
-      forward: 1
-      backward: -1
-  lateral:
-    backend_axis: vy_mps
-    public_abs_min_mps: 0.1
-    public_abs_max_mps: 0.5
-    default_speed_mps: 0.2
-    default_duration_s: 1.0
-    max_duration_s: 10.0
-    max_distance_m: 2.0
-    speed_percent:
-      min: 20
-      max: 100
-      formula: speed_percent / 100.0 * public_abs_max_mps
-    speed_levels_mps:
-      1: 0.1
-      2: 0.2
-      3: 0.3
-      4: 0.4
-      5: 0.5
-    signs:
-      left: 1
-      right: -1
-  turn:
-    backend_axis: yaw_rate_rad_s
-    public_abs_min_rad_s: 0.02
-    public_abs_max_rad_s: 1.0
-    default_yaw_rate_rad_s: 1.0
-    default_angle_deg: 45.0
-    max_angle_deg: 360.0
-    max_duration_s: 10.0
-    duration_formula: radians(angle_deg) / yaw_rate_rad_s
-    signs:
-      left: 1
-      right: -1
-  twist:
-    backend_axis: attitude_control.yaw_rate_rad_s
-    public_abs_min_rad_s: 0.02
-    public_abs_max_rad_s: 0.2
-    default_yaw_rate_rad_s: 0.2
-    default_duration_s: 0.5
-    max_duration_s: 2.0
-    default_hold_s: 0.0
-    max_hold_s: 3.0
-    default_return_to_neutral: true
-    signs:
-      left: 1
-      right: -1
-  look_body:
-    backend_axis: attitude_control.pitch_rate_rad_s
-    public_abs_min_rad_s: 0.02
-    public_abs_max_rad_s: 0.2
-    default_pitch_rate_rad_s: 0.2
-    default_duration_s: 0.5
-    max_duration_s: 2.0
-    default_hold_s: 0.0
-    max_hold_s: 3.0
-    default_return_to_neutral: true
-    signs:
-      down: 1
-      up: -1
-    sign_note: Positive pitch follows the documented right-handed body frame.
-  action_waits_s:
-    stand: 3.0
-    lie_down: 3.0
-    jump: 4.0
-    backflip: 4.0
-    provenance: upstream_demo_waits_not_action_parameters
-  stop:
-    backend_command: [0.0, 0.0, 0.0]
-    default_timeout_s: 2.0
-    max_timeout_s: 5.0
-    verification_tolerances:
-      body_linear_speed_mps: 0.05
-      body_yaw_rate_rad_s: 0.02
-      provenance: agentech_software_acceptance_thresholds
-  emergency_stop:
-    backend_method: passive
-    default_timeout_s: 0.5
-    max_timeout_s: 2.0
-    default_latch: true
-    latch_scope: agentech_runtime
+  source: agentech_skill_catalog
+  pace_percent:
+    slow: 20
+    normal: 40
+    fast: 80
+    status: user_confirmed_pending_website_text_update
+  skills:
+    forward:
+      category: movement
+      parameters:
+        speed_mps: {type: float, min: 0.05, max: 3.0, default: 1.0}
+        duration_s: {type: float, exclusive_min: 0, max: 10, default: 1.0}
+        distance_m: {type: float, min: 0, max: 2, open_loop_estimate: true}
+        speed_percent: {type: float, min: 0, max: 100, conversion_unspecified: true}
+        speed_level: {type: int, min: 0, max: 511, count: 512}
+        pace: {enum: [slow, normal, fast], status: pending_website_publication}
+        step_count: {type: int, min: 1, max: 20, status: development}
+        step_rate_hz: {type: float, min: 0.5, max: 3.0, default: 1.5, status: development}
+      backend_mapping: {type: direct, method: move, arguments: [+speed_mps, 0, 0]}
+    backward:
+      category: movement
+      parameters:
+        speed_mps: {type: float, min: 0.05, max: 3.0, default: 1.0}
+        duration_s: {type: float, exclusive_min: 0, max: 10, default: 1.0}
+        distance_m: {type: float, min: 0, max: 2, open_loop_estimate: true}
+        speed_percent: {type: float, min: 0, max: 100, conversion_unspecified: true}
+        speed_level: {type: int, min: 0, max: 511, count: 512}
+        pace: {enum: [slow, normal, fast], status: pending_website_publication}
+        step_count: {type: int, min: 1, max: 10, status: development}
+        step_rate_hz: {type: float, min: 0.5, max: 3.0, default: 1.5, status: development}
+      backend_mapping: {type: direct, method: move, arguments: [-speed_mps, 0, 0]}
+    lateral:
+      category: movement
+      functions: [lateral_left, lateral_right]
+      parameters:
+        speed_mps: {type: float, min: 0.1, max: 1.0, default: 0.5}
+        duration_s: {type: float, exclusive_min: 0, max: 10, default: 2.0}
+        distance_m: {type: float, min: 0, max: 2, open_loop_estimate: true}
+      backend_mapping:
+        type: direct
+        left_arguments: [0, +speed_mps, 0]
+        right_arguments: [0, -speed_mps, 0]
+    diagonal:
+      category: movement
+      parameters:
+        x_m: {type: float, nonzero: true, public_positive: right}
+        y_m: {type: float, nonzero: true, public_positive: forward}
+        angle_deg: {type: float, min: -180, max: 180, default: 45, positive: right}
+        speed_mps: {type: float, min: 0.05, max: 3.0, default: 0.5}
+        duration_s: {type: float, exclusive_min: 0, max: 10, default: 2.0}
+      backend_mapping:
+        type: derived
+        backend_vx: speed_mps * cos(angle_deg)
+        backend_vy: -speed_mps * sin(angle_deg)
+        component_limits_must_also_pass: {vx_abs_max: 3.0, vy_abs_max: 1.0}
+    squat_forward:
+      category: movement
+      parameters:
+        speed_mps: {type: float, min: 0.05, max: 3.0, required: true}
+        duration_s: {type: float, exclusive_min: 0, max: 10, required: true}
+      backend_mapping: {type: unavailable, reason: zsl1_has_no_crawl_or_squat_high_level_method}
+    squat_backward:
+      category: movement
+      parameters:
+        speed_mps: {type: float, min: 0.05, max: 3.0, required: true}
+        duration_s: {type: float, exclusive_min: 0, max: 10, required: true}
+      backend_mapping: {type: unavailable, reason: zsl1_has_no_crawl_or_squat_high_level_method}
+    squat_lateral:
+      category: movement
+      parameters:
+        direction: {enum: [left, right], required: true}
+        speed_mps: {type: float, min: 0.1, max: 1.0, required: true}
+        duration_s: {type: float, exclusive_min: 0, max: 10, required: true}
+      backend_mapping: {type: unavailable, reason: zsl1_has_no_crawl_or_squat_high_level_method}
+    squat_diagonal:
+      category: movement
+      parameters:
+        angle_deg: {type: float, min: -180, max: 180, cardinal_values_rejected: true}
+        speed_mps: {type: float, exclusive_min: 0, component_limited: true}
+        duration_s: {type: float, exclusive_min: 0, max: 10}
+      backend_mapping: {type: unavailable, reason: zsl1_has_no_crawl_or_squat_high_level_method}
+    turn:
+      category: movement
+      public_sign: {negative: left, positive: right}
+      parameters:
+        angle_rad: {type: float, unbounded: true}
+        turn_rate_rad_s: {type: float, min: -3, max: 3}
+        angle_deg: {type: float, unbounded: true}
+        turn_rate_deg_s: {type: float, min: -120, max: 120}
+        rate_percentage: {type: float, min: -100, max: 100, conversion_unspecified: true}
+        turn_level: {type: int, min: -511, max: 511}
+        duration_s: {type: float, exclusive_min: 0, unbounded: true}
+        convenience_calls: [turn_right, turn_left, u_turn]
+      backend_mapping:
+        type: derived
+        method: move
+        backend_yaw_rate_rad_s: -public_turn_rate_rad_s
+    yaw:
+      category: posture
+      parameters:
+        speed_rad_s: {type: float, min: 0, max: 0.6}
+        speed_deg_s: {type: float, min: 0, max: 34.38}
+        position_rad: {type: float, min: -0.466, max: 0.4426}
+        position_deg: {type: float, min: -26.73, max: 25.36}
+      backend_mapping:
+        type: blocked
+        reason: backend_is_rate_only_and_max_rate_is_0.5_not_website_0.6
+    pitch:
+      category: posture
+      parameters:
+        speed_rad_s: {type: float, min: 0, max: 0.6}
+        speed_deg_s: {type: float, min: 0, max: 34.38}
+        position_rad: {type: float, min: -0.368, max: 0.4}
+        position_deg: {type: float, min: -21.11, max: 22.98}
+      backend_mapping:
+        type: blocked
+        reason: backend_is_rate_only_and_max_rate_is_0.5_not_website_0.6
+    roll:
+      category: posture
+      parameters:
+        speed_rad_s: {type: float, min: 0, max: 0.6}
+        speed_deg_s: {type: float, min: 0, max: 34.38}
+        position_rad: {type: float, min: -0.463, max: 0.461}
+        position_deg: {type: float, min: -26.6, max: 26.4}
+      backend_mapping:
+        type: blocked
+        reason: backend_is_rate_only_and_max_rate_is_0.5_not_website_0.6
+    stay:
+      category: posture
+      parameters:
+        time_s: {type: float, exclusive_min: 0, unbounded: true}
+      backend_mapping: {type: host_runtime_wait, robot_command: none}
+    backflip:
+      category: movement
+      parameters:
+        variant: {enum: [standard], default: standard}
+        stabilize_s: {type: float, min: 0, max: 10, default: 5.0}
+        safety_gate: {status: development}
+      backend_mapping: {type: direct, method: backflip}
+    jump:
+      category: movement
+      parameters:
+        variant: {enum: [standard], default: standard}
+        stabilize_s: {type: float, min: 0, max: 10, default: 5.0}
+        height_level: {enum: [1, 2, 3], status: unsupported}
+        safety_gate: {status: development}
+      backend_mapping: {type: direct, method: jump}
+    stand:
+      category: posture
+      parameters: {}
+      backend_mapping: {type: direct, method: standUp}
+    squat:
+      category: posture
+      parameters: {}
+      backend_mapping: {type: unavailable, reason: zsl1_has_no_squat_high_level_method}
+    sit:
+      category: posture
+      parameters: {}
+      backend_mapping:
+        type: semantic_mapping
+        method: passive
+        confidence: medium
+        reason: website_describes_damping_mode_and_agibot_passive_is_damping
+    stop:
+      category: safety
+      parameters: {}
+      backend_mapping: {type: direct, method: move, arguments: [0, 0, 0]}
+    emergency_stop:
+      category: safety
+      parameters: {}
+      backend_mapping: {type: direct, method: passive}
+    get_battery_status:
+      category: sensing
+      parameters: {}
+      backend_mapping: {type: direct, method: getBatteryPower, return: percent_0_to_100}
 
-tbd_policy:
-  status: documented_not_callable
-  error_code: E_TBD_PARAMETER
-  command_emission: none
-  rule: >-
-    Keep previously designed fields visible, but do not assign a range, default,
-    backend value, or simulator behavior until an authoritative source exists.
-  parameters:
-    forward: [step_count, step_rate_hz, gait]
-    backward: [step_count, step_rate_hz, gait]
-    lateral: [step_count, step_rate_hz, gait]
-    turn: [angle_percent, turn_level, quarter_turns]
-    twist: [angle_deg, angle_percent, twist_level]
-    backflip: [variant]
-    jump: [variant, height_level]
-    stand: [height_level, posture]
-    sit: [mode]
-    stop: [mode, decel_level]
-    emergency_stop: [mode]
-    look: [target.auto, target.camera, angle_deg, angle_percent, look_level]
-    battery_fields: [voltage_v, current_a, temperature_c, is_charging]
-  unresolved_capabilities:
-    camera_pitch_control: TBD
-    absolute_body_pitch_limit_deg: TBD
-    absolute_body_yaw_limit_deg: TBD
-    body_height_limit_m: TBD
-    step_count_control: TBD
-    gait_selection: TBD
-    deceleration_profile_selection: TBD
-  unresolved_limits:
-    body_roll_angle_rad: TBD
-    body_pitch_angle_rad: TBD
-    body_height_min_m: TBD
-    body_height_max_m: TBD
-    joint_position_limits_rad: TBD
-    joint_velocity_limits_rad_s: TBD
-    continuous_joint_torque_N_m: TBD
+alignment:
+  exact_or_direct:
+    - forward
+    - backward
+    - lateral
+    - diagonal
+    - turn
+    - backflip
+    - jump
+    - stand
+    - stop
+    - emergency_stop
+    - get_battery_status
+  runtime_only:
+    - stay
+  semantic_mapping_requires_robot_test:
+    - sit
+  blocked_by_zsl1_capability:
+    - squat
+    - squat_forward
+    - squat_backward
+    - squat_lateral
+    - squat_diagonal
+  blocked_by_contract_mismatch:
+    - yaw
+    - pitch
+    - roll
+  important_differences:
+    - >-
+      The website exposes 512 speed levels (0..511); the old profile incorrectly
+      defined only five levels.
+    - >-
+      The website uses positive turn values for right and negative for left;
+      Agibot move() uses positive yaw for left, so the adapter must negate it.
+    - >-
+      Website posture speed allows 0.6 rad/s, while ZSL-1 attitudeControl is
+      limited to 0.5 rad/s and accepts velocity rather than an absolute target.
+    - >-
+      ZSL-1 does not expose crawl/squat. The similarly named crawl() method
+      belongs to ZSL-1W and must not be used for a ZSL-1 robot profile.
 
 verification:
-  firmware_version: TBD
-  hardware_model: TBD
-  last_verified_at: TBD
+  schema_and_source_review: completed
+  physical_robot_test: pending
+  required_before_release:
+    - verify_hardware_is_d1_edu_or_d1_ultra
+    - record_installed_firmware_and_sdk_version
+    - test_sit_to_passive_semantics
+    - decide_whether_to_cap_posture_speed_at_0.5_or_change_website_contract
+    - implement_and_test_absolute_pose_closed_loop_before_enabling_yaw_pitch_roll
+    - provide_a_real_squat_backend_before_enabling_squat_skills
