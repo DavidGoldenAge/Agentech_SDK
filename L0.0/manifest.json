@@ -3,7 +3,11 @@
   "layer": "L0.0",
   "description": "Atomic telemetry/data-read cards.",
   "structure": {
-    "cards": "cards/"
+    "status": "unclassified",
+    "cards": {
+      "en": "cards/Unclassify/En/",
+      "ch": "cards/Unclassify/Ch/"
+    }
   },
   "cards": [
     {
@@ -11,8 +15,8 @@
       "function": "Agentech.get_battery_status",
       "layer": "L0.0",
       "paths": {
-        "en": "cards/get_battery_status.en.md",
-        "zh": "cards/get_battery_status.zh.md"
+        "en": "cards/Unclassify/En/get_battery_status.en.md",
+        "ch": "cards/Unclassify/Ch/get_battery_status.zh.md"
       }
     }
   ]

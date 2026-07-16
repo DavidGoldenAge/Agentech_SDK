@@ -8,7 +8,8 @@
     "L1.0",
     "L1.5",
     "L2.0",
-    "L2.5"
+    "L2.5",
+    "L3.0"
   ],
   "cards": {
     "total": 13,
@@ -17,27 +18,61 @@
   },
   "packages": {
     "L0.0": "L0.0/",
-    "L0.5": "L0.5/"
+    "L0.5": "L0.5/",
+    "L1.0": "L1.0/",
+    "L1.5": "L1.5/",
+    "L2.0": "L2.0/",
+    "L2.5": "L2.5/",
+    "L3.0": "L3.0/"
   },
   "structure": {
-    "L0.0": {
-      "manifest": "L0.0/manifest.json",
-      "cards": "L0.0/cards/"
-    },
-    "L0.5": {
-      "manifest": "L0.5/manifest.json",
-      "cards": {
-        "en": "L0.5/cards/en/",
-        "zh": "L0.5/cards/zh/"
-      }
-    }
+    "path_order": [
+      "layer",
+      "cards",
+      "robot",
+      "language",
+      "category",
+      "card"
+    ],
+    "robots": [
+      "ff.navi",
+      "ff.aegis",
+      "ff.master"
+    ],
+    "languages": [
+      "En",
+      "Ch"
+    ],
+    "categories": [
+      "movement",
+      "posture",
+      "safety",
+      "sensing",
+      "athletics",
+      "actions",
+      "configuration"
+    ],
+    "unclassified_path_template": "L<level>/cards/Unclassify/<language>/<card>.md",
+    "card_path_template": "L<level>/cards/<robot>/<language>/<category>/<card>.md",
+    "ff.master_status": "testing_not_started"
   },
   "entrypoints": {
-    "L0.0 package": "L0.0/",
-    "L0.5 package": "L0.5/",
-    "L0.0 English card": "L0.0/cards/get_battery_status.en.md",
-    "L0.0 Chinese card": "L0.0/cards/get_battery_status.zh.md",
-    "L0.5 English cards": "L0.5/cards/en/",
-    "L0.5 Chinese cards": "L0.5/cards/zh/"
+    "root": "README.md",
+    "L0.0": "L0.0/README.md",
+    "L0.5": "L0.5/README.md",
+    "L1.0": "L1.0/README.md",
+    "L1.5": "L1.5/README.md",
+    "L2.0": "L2.0/README.md",
+    "L2.5": "L2.5/README.md",
+    "L3.0": "L3.0/README.md"
+  },
+  "legacy": {
+    "status": "moved_to_unclassify_pending_card_by_card_migration",
+    "paths": [
+      "L0.0/cards/Unclassify/En/",
+      "L0.0/cards/Unclassify/Ch/",
+      "L0.5/cards/Unclassify/En/",
+      "L0.5/cards/Unclassify/Ch/"
+    ]
   }
 }

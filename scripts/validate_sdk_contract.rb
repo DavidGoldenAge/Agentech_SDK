@@ -119,9 +119,10 @@ assert(public_contract.dig("emergency_stop", "backend_method") == "passive", "em
 
 expected_modules = %w[Definition Syntax Constraints Defaults Parameters Behavior Return Example]
 card_files = Dir[
-  ROOT.join("L0.5/cards/en/*.md").to_s,
-  ROOT.join("L0.5/cards/zh/*.md").to_s,
-  ROOT.join("L0.0/cards/*.md").to_s
+  ROOT.join("L0.5/cards/Unclassify/En/*.md").to_s,
+  ROOT.join("L0.5/cards/Unclassify/Ch/*.md").to_s,
+  ROOT.join("L0.0/cards/Unclassify/En/*.md").to_s,
+  ROOT.join("L0.0/cards/Unclassify/Ch/*.md").to_s
 ].reject { |path| path.end_with?("README.md") }.sort
 assert(card_files.length == 26, "expected 26 bilingual card files, found #{card_files.length}")
 
@@ -173,10 +174,16 @@ tbd_card_paths = {
 }
 tbd_policy.fetch("parameters").each do |card_name, fields|
   paths = if card_name == "battery_fields"
-            %w[L0.0/cards/get_battery_status.en.md L0.0/cards/get_battery_status.zh.md]
+            %w[
+              L0.0/cards/Unclassify/En/get_battery_status.en.md
+              L0.0/cards/Unclassify/Ch/get_battery_status.zh.md
+            ]
           else
             filename = tbd_card_paths.fetch(card_name)
-            ["L0.5/cards/en/#{filename}", "L0.5/cards/zh/#{filename}"]
+            [
+              "L0.5/cards/Unclassify/En/#{filename}",
+              "L0.5/cards/Unclassify/Ch/#{filename}"
+            ]
           end
 
   paths.each do |relative_path|
@@ -203,8 +210,8 @@ callable_tbd_patterns = {
   "10_stop.md" => %w[mode= decel_level=]
 }
 callable_tbd_patterns.each do |filename, patterns|
-  %w[en zh].each do |language|
-    text = ROOT.join("L0.5/cards", language, filename).read
+  %w[En Ch].each do |language|
+    text = ROOT.join("L0.5/cards/Unclassify", language, filename).read
     patterns.each do |pattern|
       assert(!text.include?(pattern), "#{filename} makes TBD field callable: #{pattern}")
     end
@@ -213,7 +220,7 @@ end
 
 root_manifest = JSON.parse(ROOT.join("manifest.json").read)
 assert(root_manifest.fetch("version") == profile.fetch("sdk_version"), "root manifest and profile versions differ")
-assert(!ROOT.join("L0.5/cards/en/09_lie_down.md").exist?, "compatibility sit card was unexpectedly renamed")
-assert(!ROOT.join("L0.5/cards/en/12_pitch_body.md").exist?, "compatibility look card was unexpectedly renamed")
+assert(!ROOT.join("L0.5/cards/Unclassify/En/09_lie_down.md").exist?, "compatibility sit card was unexpectedly renamed")
+assert(!ROOT.join("L0.5/cards/Unclassify/En/12_pitch_body.md").exist?, "compatibility look card was unexpectedly renamed")
 
 puts "SDK contract valid: #{card_files.length} cards, deterministic mappings, and preserved TBD fields."

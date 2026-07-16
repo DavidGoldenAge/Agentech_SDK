@@ -3,9 +3,10 @@
   "layer": "L0.5",
   "description": "Atomic bounded ZSL-1 movement, discrete-action, posture, and safety cards.",
   "structure": {
+    "status": "unclassified",
     "cards": {
-      "en": "cards/en/",
-      "zh": "cards/zh/"
+      "en": "cards/Unclassify/En/",
+      "ch": "cards/Unclassify/Ch/"
     }
   },
   "cards": [
@@ -14,8 +15,8 @@
       "function": "Agentech.forward",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/01_forward.md",
-        "zh": "cards/zh/01_forward.md"
+        "en": "cards/Unclassify/En/01_forward.md",
+        "ch": "cards/Unclassify/Ch/01_forward.md"
       }
     },
     {
@@ -23,8 +24,8 @@
       "function": "Agentech.backward",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/02_backward.md",
-        "zh": "cards/zh/02_backward.md"
+        "en": "cards/Unclassify/En/02_backward.md",
+        "ch": "cards/Unclassify/Ch/02_backward.md"
       }
     },
     {
@@ -32,8 +33,8 @@
       "function": "Agentech.lateral",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/03_lateral.md",
-        "zh": "cards/zh/03_lateral.md"
+        "en": "cards/Unclassify/En/03_lateral.md",
+        "ch": "cards/Unclassify/Ch/03_lateral.md"
       }
     },
     {
@@ -41,8 +42,8 @@
       "function": "Agentech.turn",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/04_turn.md",
-        "zh": "cards/zh/04_turn.md"
+        "en": "cards/Unclassify/En/04_turn.md",
+        "ch": "cards/Unclassify/Ch/04_turn.md"
       }
     },
     {
@@ -50,8 +51,8 @@
       "function": "Agentech.twist",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/05_twist.md",
-        "zh": "cards/zh/05_twist.md"
+        "en": "cards/Unclassify/En/05_twist.md",
+        "ch": "cards/Unclassify/Ch/05_twist.md"
       }
     },
     {
@@ -59,8 +60,8 @@
       "function": "Agentech.backflip",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/06_backflip.md",
-        "zh": "cards/zh/06_backflip.md"
+        "en": "cards/Unclassify/En/06_backflip.md",
+        "ch": "cards/Unclassify/Ch/06_backflip.md"
       }
     },
     {
@@ -68,8 +69,8 @@
       "function": "Agentech.jump",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/07_jump.md",
-        "zh": "cards/zh/07_jump.md"
+        "en": "cards/Unclassify/En/07_jump.md",
+        "ch": "cards/Unclassify/Ch/07_jump.md"
       }
     },
     {
@@ -77,8 +78,8 @@
       "function": "Agentech.stand",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/08_stand.md",
-        "zh": "cards/zh/08_stand.md"
+        "en": "cards/Unclassify/En/08_stand.md",
+        "ch": "cards/Unclassify/Ch/08_stand.md"
       }
     },
     {
@@ -86,8 +87,8 @@
       "function": "Agentech.sit",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/09_sit.md",
-        "zh": "cards/zh/09_sit.md"
+        "en": "cards/Unclassify/En/09_sit.md",
+        "ch": "cards/Unclassify/Ch/09_sit.md"
       }
     },
     {
@@ -95,8 +96,8 @@
       "function": "Agentech.stop",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/10_stop.md",
-        "zh": "cards/zh/10_stop.md"
+        "en": "cards/Unclassify/En/10_stop.md",
+        "ch": "cards/Unclassify/Ch/10_stop.md"
       }
     },
     {
@@ -104,8 +105,8 @@
       "function": "Agentech.emergency_stop",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/11_emergency_stop.md",
-        "zh": "cards/zh/11_emergency_stop.md"
+        "en": "cards/Unclassify/En/11_emergency_stop.md",
+        "ch": "cards/Unclassify/Ch/11_emergency_stop.md"
       }
     },
     {
@@ -113,8 +114,8 @@
       "function": "Agentech.look",
       "layer": "L0.5",
       "paths": {
-        "en": "cards/en/12_look.md",
-        "zh": "cards/zh/12_look.md"
+        "en": "cards/Unclassify/En/12_look.md",
+        "ch": "cards/Unclassify/Ch/12_look.md"
       }
     }
   ]
